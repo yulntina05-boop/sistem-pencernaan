@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Misi Pencernaan - Game Edukasi IPAS</title>
+  <meta name="description" content="Game Edukasi IPAS Fase C Kelas VI: Petualangan Menjelajahi Sistem Pencernaan Manusia">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- jsPDF for Report Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-particles" id="bg-particles"></div>
+
+  <!-- Audio Controls -->
+  <div class="audio-controls">
+    <button class="audio-btn" id="btn-music" onclick="Game.toggleMusic()" title="Toggle Music">🎵</button>
+    <button class="audio-btn" id="btn-sfx" onclick="Game.toggleSFX()" title="Toggle Sound Effects">🔊</button>
+  </div>
+
+  <!-- ==================== COVER SCREEN ==================== -->
+  <div class="screen fade-in" id="cover-screen">
+    <div class="cover-content">
+      <div class="game-logo">🧠</div>
+      <h1 class="game-title">MISI PENCERNAAN</h1>
+      <div class="game-subtitle">Petualangan Menjelajahi Sistem Pencernaan Manusia</div>
+      <div class="game-info">
+        <p>IPAS - Fase C / Kelas VI</p>
+        <p>MI Al-Khairaat Tolango</p>
+      </div>
+      
+      <div class="cover-buttons">
+        <button class="btn btn-primary" onclick="Game.startGame()">▶️ MULAI BERMAIN</button>
+        <button class="btn btn-secondary" onclick="Game.showTujuan()">🎯 TUJUAN PEMBELAJARAN</button>
+        <button class="btn btn-secondary" onclick="Game.showPanduan()">📖 PANDUAN BERMAIN</button>
+        <button class="btn btn-secondary" onclick="Game.showPengembang()">👨‍💻 INFORMASI PENGEMBANG</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== INPUT SCREEN ==================== -->
+  <div class="screen hidden" id="input-screen">
+    <div class="form-container">
+      <div class="form-card">
+        <div class="form-header">
+          <span class="emoji-large">🎒</span>
+          <h2>Siapkan Dirimu, Petualang!</h2>
+        </div>
+        
+        <div class="form-group">
+          <label for="student-name">Nama Panggilan:</label>
+          <input type="text" id="student-name" placeholder="Masukkan namamu..." maxlength="20" autocomplete="off">
+          <div class="form-error" id="name-error">Nama tidak boleh kosong!</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="student-class">Kelas:</label>
+          <input type="text" id="student-class" value="VI" readonly style="background:rgba(255,255,255,0.05);color:var(--text-muted)">
+        </div>
+        
+        <div class="form-group">
+          <label for="student-school">Sekolah:</label>
+          <input type="text" id="student-school" value="MI Al-Khairaat Tolango" readonly style="background:rgba(255,255,255,0.05);color:var(--text-muted)">
+        </div>
+        
+        <div style="text-align: center; margin-top: 25px;">
+          <button class="btn btn-primary" onclick="Game.submitStudent()">Lanjut 👉</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHARACTER SCREEN ==================== -->
+  <div class="screen hidden" id="character-screen">
+    <div class="form-container" style="max-width: 600px;">
+      <div class="form-header">
+        <span class="emoji-large">✨</span>
+        <h2>Pilih Karaktermu</h2>
+      </div>
+      
+      <div class="character-grid" id="character-grid">
+        <!-- Rendered by JS -->
+      </div>
+      
+      <div style="text-align: center; margin-top: 25px;">
+        <button class="btn btn-primary" id="btn-start-adventure" onclick="Game.startAdventure()" disabled>🚀 Mulai Petualangan!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WORLD MAP SCREEN ==================== -->
+  <div class="screen hidden" id="worldmap-screen">
+    <div class="worldmap-container">
+      <div class="worldmap-header">
+        <h2 class="worldmap-title">🗺️ Peta Petualangan</h2>
+        <div class="worldmap-stats">
+          <div class="stat-badge"><span style="color:var(--accent)">⭐</span> <span id="hud-xp-map">0</span> XP</div>
+          <div class="stat-badge">🏅 <span id="hud-badges-map">0</span> Badge</div>
+        </div>
+      </div>
+      
+      <div class="map-path" id="map-path">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GAMEPLAY SCREEN ==================== -->
+  <div class="screen hidden" id="gameplay-screen">
+    <!-- Rendered dynamically by JS depending on active state -->
+  </div>
+
+  <!-- ==================== REFLECTION SCREEN ==================== -->
+  <div class="screen hidden" id="reflection-screen">
+    <div class="reflection-container">
+      <div style="text-align: center; margin-bottom: 25px;">
+        <span class="emoji-large" style="font-size: 3.5rem;">📝</span>
+        <h2 style="font-family: var(--font-display); font-size: 2rem; color: var(--accent);">Bagaimana Petualanganmu?</h2>
+        <p style="color: var(--text-secondary);">Mari refleksikan apa yang telah kamu pelajari!</p>
+      </div>
+      
+      <div id="reflection-content">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESULTS SCREEN ==================== -->
+  <div class="screen hidden" id="results-screen">
+    <div class="results-container">
+      <div style="text-align: center; margin-bottom: 25px;">
+        <span class="emoji-large" style="font-size: 4rem; display: block; margin-bottom: 10px;">🏆</span>
+        <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--accent);">Laporan Belajarmu Sudah Siap!</h2>
+      </div>
+      
+      <div id="results-content">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VICTORY SCREEN ==================== -->
+  <div class="screen hidden" id="victory-screen">
+    <div class="victory-content">
+      <div class="victory-emoji">🎉</div>
+      <h1 class="victory-title">SELAMAT!</h1>
+      <p class="victory-subtitle">Kamu telah berhasil mengalahkan Si Kuman dan menyelesaikan seluruh tantangan Misi Pencernaan!</p>
+      <button class="btn btn-primary" onclick="Game.goToReflection()">📝 Lanjut ke Refleksi</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data/characters.js"></script>
+  <script src="js/data/maps.js"></script>
+  <script src="js/game/gameState.js"></script>
+  <script src="js/utils/audio.js"></script>
+  <script src="js/utils/pdf.js"></script>
+  <script src="js/game/engine.js"></script>
+</body>
+</html>
